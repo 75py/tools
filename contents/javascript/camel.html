@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>スネーク・キャメル相互変換</title>
+<!-- commons javascript -->
+<script src="../../assets/js/ga.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<!-- /commons javascript -->
+
+<!-- Bootstrap -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Bootstrap -->
+<link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+<!-- /Bootstrap -->
+
+<!-- common css -->
+<link rel="stylesheet" type="text/css" href="../../assets/css/style.css">
+<!-- /common css -->
+
+<script src="../../assets/js/jquery.cookie.autosave.js"></script>
+<script>
+$(function(){
+	$('input[name="case"]').cookieAutosave();
+});
+</script>
+<script>
+$(function(){
+	$('#resultText').on('click', function(){
+		$(this).select();
+	});
+
+	$('#toCamel').on('click', function(){
+		var origin = $('#originalText').val();
+		var result = origin.replace(/_./g, function(matched) {
+			return matched.charAt(1).toUpperCase();
+		});
+
+		if($('input[name="case"]:checked').val() == 'upper'){
+			result = result.toUpperCase();
+		}else if($('input[name="case"]:checked').val() == 'lower'){
+			result = result.toLowerCase();
+		}
+		$('#resultText').val(result);
+	});
+	$('#toSnake').on('click', function(){
+		var origin = $('#originalText').val();
+		var result = origin.replace(/([A-Z]+)([A-Z][a-z])/g, "$1_$2").replace(/([a-z])([A-Z])/g, "$1_$2");
+
+		if($('input[name="case"]:checked').val() == 'upper'){
+			result = result.toUpperCase();
+		}else if($('input[name="case"]:checked').val() == 'lower'){
+			result = result.toLowerCase();
+		}
+		$('#resultText').val(result);
+	});
+});
+</script>
+</head>
+
+<body>
+<a class="hide" href="#content">Skip to main content</a>
+
+<header>
+	<div class="navbar navbar-default navbar-static-top">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#">Tools</a>
+			</div>
+			<div class="navbar-collapse collapse">
+				<ul class="nav navbar-nav">
+					<li><a href="../../index.html">Home</a></li>
+					<li class="active"><a href="./index.html">Javascript</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+	<div class="container">
+		<ol class="breadcrumb">
+			<li><a href="../../index.html">Home</a></li>
+			<li><a href="./index.html">Javascript</a></li>
+			<li class="active">スネーク・キャメル相互変換</li>
+		</ol>
+	</div>
+</header>
+
+<main class="container">
+	<div class="page-header">
+		<h1>スネーク・キャメル相互変換</h1>
+	</div>
+
+	<div class="containter">
+		<textarea id="originalText" cols="100" rows="10"></textarea>
+
+		<br>
+		<button id="toCamel">キャメル形式に変換</button>
+		<button id="toSnake">スネーク形式に変換</button>
+		<br>
+		<label><input type="radio" name="case" value="through" checked="checked" />何もしない</label>
+		<label><input type="radio" name="case" value="upper" />全て大文字にする</label>
+		<label><input type="radio" name="case" value="lower" />全て小文字にする</label>
+
+		<br>
+
+		<textarea id="resultText" cols="100" rows="8" readonly="readonly"></textarea>
+	</div>
+</main>
+
+<footer>
+	<div class="container">
+		<p>&copy; 2014 <a href="https://twitter.com/dev75py" target="_blank">75py</a></p>
+	</div>
+</footer>
+</body>
+</html>

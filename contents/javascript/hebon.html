@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>簡易ヘボン式チェッカー</title>
+<!-- commons javascript -->
+<script src="../../assets/js/ga.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<!-- /commons javascript -->
+
+<!-- Bootstrap -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Bootstrap -->
+<link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+<!-- /Bootstrap -->
+
+<!-- common css -->
+<link rel="stylesheet" type="text/css" href="../../assets/css/style.css">
+<!-- /common css -->
+
+<script src="../../assets/js/jquery.cookie.autosave.js"></script>
+<script src="../../assets/js/hebon_validator.js"></script>
+
+<script type="text/javascript">
+	$(function() {
+		$('#checkButton').click(function() {
+
+			var hebonValidator = new HebonValidator();
+
+			// 単語登録
+			var ignorePatterns = document.getElementById('ignore_pattern_input').value.toLowerCase();
+			hebonValidator.addIgnorePatterns(ignorePatterns);
+
+			// パターン登録
+			var ignoreWords = document.getElementById('ignore_words_input').value.toLowerCase();
+			hebonValidator.addIgnoreWords(ignoreWords);
+
+			// クッキーに保存
+			$.cookie('ignore_pattern', $('#ignore_pattern_input').val(), {
+				expires : 30
+			});
+			$.cookie('ignore_words', $('#ignore_words_input').val(), {
+				expires : 30
+			});
+
+			var lines = document.getElementById('textarea_input').value.toLowerCase().split(/[\s,]+/);
+			var errors = "";
+			for (var i = 0, n = lines.length; i < n; i++) {
+				var value = lines[i];
+				if (!hebonValidator.isValid(value)) {
+					errors += "Error: " + value + "\n";
+				}
+			}
+
+			document.getElementById('textarea_output').value = errors === "" ? "OK" : errors;
+		});
+	});
+
+	$(window).load(function() {
+		// クッキーから単語・パターンを復元
+		if ($.cookie('ignore_pattern')) {
+			$('#ignore_pattern_input').val($.cookie('ignore_pattern'));
+		};
+		if ($.cookie('ignore_words')) {
+			$('#ignore_words_input').val($.cookie('ignore_words'));
+		};
+	}); 
+</script>
+<style>
+	#ignore_words_input, #ignore_pattern_input, #textarea_input, #textarea_output {
+		width: 50%;
+		margin: 0.5em 0 0.5em 1em;
+	}
+
+	#textarea_input {
+		height: 8em;
+	}
+
+	#textarea_output {
+		height: 6em;
+	}
+</style>
+
+</head>
+<body>
+<a class="hide" href="#content">Skip to main content</a>
+
+<header>
+	<div class="navbar navbar-default navbar-static-top">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#">Tools</a>
+			</div>
+			<div class="navbar-collapse collapse">
+				<ul class="nav navbar-nav">
+					<li><a href="../../index.html">Home</a></li>
+					<li class="active"><a href="./index.html">Javascript</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+	<div class="container">
+		<ol class="breadcrumb">
+			<li><a href="../../index.html">Home</a></li>
+			<li><a href="./index.html">Javascript</a></li>
+			<li class="active">簡易ヘボン式チェッカー</li>
+		</ol>
+	</div>
+</header>
+
+<main class="container">
+	<div class="page-header">
+		<h1>簡易ヘボン式チェッカー <small><small>入力値がヘボン式のフォーマットとして正しいか判定するツール</small></small></h1>
+	</div>
+
+	<div class="containter">
+		<label>単語登録（例外として認める単語をカンマ区切りで入力）
+			<br>
+			<input type="text" id="ignore_words_input" placeholder="id,staff など">
+		</label>
+		<br>
+		<label>例外パターン（追加で認めるパターンをカンマ区切りで入力）
+			<br>
+			<input type="text" id="ignore_pattern_input" placeholder="sya,1,dhi など">
+		</label>
+		<br>
+		<label>チェックする文字列</label>
+			<br>
+			<textarea id="textarea_input" placeholder="チェックする文字列を入力してください。"></textarea>
+			<br>
+		<br>
+		<input type="button" value="CHECK" id="checkButton">
+		<br>
+		<br>
+		<textarea id="textarea_output" readonly placeholder="判定結果を表示します。" ></textarea>
+	</div>
+</main>
+
+<footer>
+	<div class="container">
+		<p>&copy; 2014 <a href="https://twitter.com/dev75py" target="_blank">75py</a></p>
+	</div>
+</footer>
+</body>
+</html>
